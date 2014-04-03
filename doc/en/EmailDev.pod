@@ -1,0 +1,18 @@
+=head1 NAME
+
+EmailDev
+
+=head1 DESCRIPTION
+
+During development it might be useful to suppress sending emails (to avoid spamming
+existing users/customers). If you need the mail plaintext without clicking in the
+frontend or working on the database, this add on can help.
+
+Just set email backend to EmailDev and configure the path were the mails are
+saved to, and you'll get the mails.
+
+=head1 AUTHOR AND LICENSE
+
+  License: AGPL
+
+Renee Baecker C<info@perl-services.de>
