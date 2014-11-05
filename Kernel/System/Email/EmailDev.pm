@@ -15,6 +15,14 @@ use warnings;
 use File::Temp qw(tempdir);
 use File::Path qw(make_path);
 
+our @ObjectDependencies = qw(
+    Kernel::Config
+    Kernel::System::Log
+    Kernel::System::Encode
+    Kernel::System::Main
+    Kernel::System::Time
+);
+
 sub new {
     my ( $Type, %Param ) = @_;
 
@@ -22,16 +30,12 @@ sub new {
     my $Self = {%Param};
     bless( $Self, $Type );
 
-    # check all needed objects
-    for my $Needed (qw(ConfigObject LogObject EncodeObject MainObject TimeObject)) {
-        die "Got no $Needed" if ( !$Self->{$Needed} );
-    }
-
     # debug
     $Self->{Debug} = $Param{Debug} || 0;
 
     # check if temp dir exists, otherwise use global temp dir
-    my $Dir = $Self->{ConfigObject}->Get( 'Home' ) . '/' . $Self->{ConfigObject}->Get( 'EmailDev::Path' );
+    my $ConfigObject = $Kernel::OM->Get('Kernel::Config');
+    my $Dir = $ConfigObject->Get( 'Home' ) . '/' . $ConfigObject->Get( 'EmailDev::Path' );
     if ( !-e $Dir ) {
         make_path( $Dir );
     }
@@ -54,25 +58,33 @@ sub Check {
 sub Send {
     my ( $Self, %Param ) = @_;
 
+    my $LogObject    = $Kernel::OM->Get('Kernel::System::Log');
+    my $EncodeObject = $Kernel::OM->Get('Kernel::System::Encode');
+    my $TimeObject   = $Kernel::OM->Get('Kernel::System::Time');
+    my $MainObject   = $Kernel::OM->Get('Kernel::System::Main');
+
     # check needed stuff
-    for (qw(Header Body ToArray)) {
-        if ( !$Param{$_} ) {
-            $Self->{LogObject}->Log( Priority => 'error', Message => "Need $_!" );
+    for my $Needed (qw(Header Body ToArray)) {
+        if ( !$Param{$Needed} ) {
+            $LogObject->Log(
+                Priority => 'error',
+                Message  => "Need $Needed!",
+            );
             return;
         }
     }
 
     # encode utf8 header strings (of course, there should only be 7 bit in there!)
-    $Self->{EncodeObject}->EncodeOutput( $Param{Header} );
+    $EncodeObject->EncodeOutput( $Param{Header} );
 
     # encode utf8 body strings
-    $Self->{EncodeObject}->EncodeOutput( $Param{Body} );
+    $EncodeObject->EncodeOutput( $Param{Body} );
 
     # send data
     my $To       = join ', ', @{ $Param{ToArray} };
     my $From     = $Param{From} // '';
-    my $Time     = $Self->{TimeObject}->SystemTime();
-    my $MailFile = $Self->{MainObject}->FileWrite(
+    my $Time     = $TimeObject->SystemTime();
+    my $MailFile = $MainObject->FileWrite(
         Filename   => "Mail_${From}_${To}_${Time}.eml",
         Directory  => $Self->{Dir},
         Content    => \"${ $Param{Header} }\n${ $Param{Body} }",
@@ -83,7 +95,7 @@ sub Send {
 
     # debug
     if ( $Self->{Debug} > 2 ) {
-        $Self->{LogObject}->Log(
+        $LogObject->Log(
             Priority => 'notice',
             Message  => "Saved email to '$To' from '$From' as $MailFile.",
         );
