@@ -93,6 +93,8 @@ sub _MailList {
         Filter    => '*.eml',
     );
 
+    @Mails = sort { -M $a <=> -M $b }@Mails;
+
     return @Mails;
 }
 
