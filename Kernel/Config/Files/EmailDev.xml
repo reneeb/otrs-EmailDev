@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <otrs_config version="1.0" init="Application">
-    <CVS>$Id: EmailDev.xml,v 1.1.1.1 2011/04/15 07:49:58 rb Exp $</CVS>
     <ConfigItem Name="EmailDev::Path" Required="0" Valid="1">
         <Description Lang="en">Path to the dir where the mails are saved to (relative to $OTRS_HOME).</Description>
         <Description Lang="de">Pfad zum Verzeichnis in das die Mails gespeichert werden (Relativ zu $OTRS_HOME).</Description>
@@ -8,6 +7,26 @@
         <SubGroup>Core::Sendmail</SubGroup>
         <Setting>
             <String Regex="">var/tmp/email_dev</String>
+        </Setting>
+    </ConfigItem>
+    <ConfigItem Name="Frontend::Module###AdminEmailDev" Required="0" Valid="1">
+        <Description Translatable="1">Frontend module registration for the development emails interface</Description>
+        <Group>EmailDev</Group>
+        <SubGroup>Frontend::Admin::ModuleRegistration</SubGroup>
+        <Setting>
+            <FrontendModuleReg>
+                <Group>admin</Group>
+                <Description>List and show development emails.</Description>
+                <Title>EmailDev</Title>
+                <NavBarName>Admin</NavBarName>
+                <NavBarModule>
+                    <Module>Kernel::Output::HTML::NavBarModuleAdmin</Module>
+                    <Name Translatable="1">EmailDev</Name>
+                    <Description Translatable="1">List and show development emails.</Description>
+                    <Block>Email</Block>
+                    <Prio>12139</Prio>
+                </NavBarModule>
+            </FrontendModuleReg>
         </Setting>
     </ConfigItem>
 </otrs_config>

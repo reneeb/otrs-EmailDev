@@ -1,0 +1,50 @@
+# --
+# AdminEmailDevList.tt - provides HTML form for AdminEmailDevList
+# Copyright (C) 2015 Perl-Services.de, http://perl-services.de/
+# --
+# This software comes with ABSOLUTELY NO WARRANTY. For details, see
+# the enclosed file COPYING for license information (AGPL). If you
+# did not receive this file, see http://www.gnu.org/licenses/agpl.txt.
+# --
+
+<div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
+    <h1>[% Translate("Emails") | html %]</h1>
+    <div class="ContentColumn">
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>[% Translate("List") | html %]</h2>
+            </div>
+            <div class="Content">
+                <table class="DataTable" id="News">
+                    <thead>
+                        <tr>
+                            <th>[% Translate("Subject") | html %]</th>
+                            <th>[% Translate("From") | html %]</th>
+                            <th>[% Translate("To") | html %]</th>
+                            <th>[% Translate("Date") | html %]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+[% RenderBlockStart("Mail") %]
+                        <tr>
+                            <td>
+                                <a href="[% Env("Baselink") %]Action=[% Env("Action") %];Subaction=Show;Filename=[% Data.Filename | uri %]">[% Data.Subject | html %]</a>
+                            </td>
+                            <td>
+                                [% Data.From | html %]
+                            </td>
+                            <td>
+                                [% Data.To | html %]
+                            </td>
+                            <td>
+                                [% Data.Date | html %]
+                            </td>
+                        </tr>
+[% RenderBlockEnd("Mail") %]
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="Clear"></div>
+</div>

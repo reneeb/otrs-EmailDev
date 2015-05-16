@@ -84,8 +84,10 @@ sub Send {
     my $To       = join ', ', @{ $Param{ToArray} };
     my $From     = $Param{From} // '';
     my $Time     = $TimeObject->SystemTime();
+    my $Filename = $MainObject->FilenameCleanUp( Filename => "Mail_${From}_${To}_${Time}.eml" );
+
     my $MailFile = $MainObject->FileWrite(
-        Filename   => "Mail_${From}_${To}_${Time}.eml",
+        Filename   => $Filename,
         Directory  => $Self->{Dir},
         Content    => \"${ $Param{Header} }\n${ $Param{Body} }",
         Mode       => 'binmode',
