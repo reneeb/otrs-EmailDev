@@ -20,7 +20,7 @@
                 <Title>EmailDev</Title>
                 <NavBarName>Admin</NavBarName>
                 <NavBarModule>
-                    <Module>Kernel::Output::HTML::NavBarModuleAdmin</Module>
+                    <Module>Kernel::Output::HTML::NavBar::ModuleAdmin</Module>
                     <Name Translatable="1">EmailDev</Name>
                     <Description Translatable="1">List and show development emails.</Description>
                     <Block>Email</Block>
