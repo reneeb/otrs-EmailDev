@@ -84,7 +84,8 @@ sub Send {
     my $To       = join ', ', @{ $Param{ToArray} };
     my $From     = $Param{From} // '';
     my $Time     = $TimeObject->SystemTime();
-    my $Filename = $MainObject->FilenameCleanUp( Filename => "Mail_${From}_${To}_${Time}.eml" );
+    my $Random   = sprintf "%04d", int rand 1000;
+    my $Filename = $MainObject->FilenameCleanUp( Filename => "Mail_${From}_${To}_${Time}_${Random}.eml" );
 
     my $MailFile = $MainObject->FileWrite(
         Filename   => $Filename,
