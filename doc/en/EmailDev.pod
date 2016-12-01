@@ -13,6 +13,6 @@ saved to, and you'll get the mails.
 
 =head1 AUTHOR AND LICENSE
 
-  License: AGPL
+This module is licensed under the terms of AGPL 3.0.
 
-Renee Baecker C<info@perl-services.de>
+Author: Renee Baecker, Perl-Services.de, C<< <otrs@perl-services.de> >>

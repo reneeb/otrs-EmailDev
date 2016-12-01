@@ -1,16 +1,17 @@
 {
     "name": "EmailDev",
-    "version": "5.0.2",
+    "version": "5.0.3",
     "framework": [
         "5.0.x"
     ],
     "vendor": {
-        "name":  "Perl-Services.de",
+        "name": "Perl-Services.de",
         "url": "http://www.perl-services.de"
     },
     "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007",
     "description" : {
         "en": "Email Backend to save mails on disk.",
-        "de": "Email-Backend, das die Mails auf Platte speichert"
+        "de": "Email-Backend, das die Mails auf Platte speichert.",
+        "hu": "E-mail háttérprogram a levelek lemezre mentéséhez."
     }
 }
