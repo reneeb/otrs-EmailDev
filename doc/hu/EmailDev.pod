@@ -1,0 +1,28 @@
+=encoding utf-8
+
+=head1 NÉV
+
+EmailDev - e-mail háttérprogram a levelek lemezre mentéséhez
+
+=head1 LEÍRÁS
+
+Fejlesztés során hasznos lehet az e-mailek küldését visszafogni (hogy 
+elkerülhető legyen a meglévő felhasználók vagy ügyfelek bombázása kéretlen 
+levelekkel). Ha szüksége van a levél egyszerű szövegére anélkül, hogy 
+rákattintana az előtétprogramra vagy ránézne az adatbázisra, akkor ez a 
+kiegészítő a segítségére lesz.
+
+Egyszerűen állítsa az e-mail háttérprogramot „EmailDev” értékre, majd állítsa 
+be azt azt útvonalat, ahova a levelek mentésre kerüljenek, és meg fogja kapni 
+a leveleket.
+
+=head1 SZERZŐ ÉS LICENC
+
+Ez a modul az AGPL 3.0 feltételei szerint licencelt.
+
+Szerző: Renée Bäcker, Perl-Services.de, C<< <otrs@perl-services.de> >>
+
+=head1 MAGYAR FORDÍTÁS
+
+A magyar fordítást az OTRS-megoldások csapata készítette.
+Copyright (C) 2016 Úr Balázs, L<http://otrs-megoldasok.hu>
