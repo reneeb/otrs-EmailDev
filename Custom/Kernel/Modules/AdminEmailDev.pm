@@ -14,6 +14,7 @@ use warnings;
 
 use File::Spec;
 use File::Basename;
+use MIME::Words qw(decode_mimewords);
 
 our @ObjectDependencies = qw(
     Kernel::Config
@@ -103,7 +104,9 @@ sub _MailInfo {
 
     return if !$Param{File};
 
-    my $MainObject = $Kernel::OM->Get('Kernel::System::Main');
+    my $MainObject   = $Kernel::OM->Get('Kernel::System::Main');
+    my $LogObject    = $Kernel::OM->Get('Kernel::System::Log');
+    my $EncodeObject = $Kernel::OM->Get('Kernel::System::Encode');
 
     my $Content = $MainObject->FileRead( Location => $Param{File} );
 
@@ -111,6 +114,32 @@ sub _MailInfo {
 
     for my $Header ( qw(From To Subject Date) ) {
         my ($Value) = ${$Content} =~ m{ ^ $Header: \s+ ([^\n]*) }xms;
+
+        if ( $Header eq 'To' || $Header eq 'From' ) {
+            my @Result       = decode_mimewords( $Value );
+            my $DecodedValue = '';
+
+            for my $Part ( @Result ) {
+                my $String  = $Part->[0];
+                my $Charset = $Part->[1];
+
+                if ( $Charset &&  lc $Charset ne 'utf-8' ) {
+                    $String = $EncodeObject->Convert(
+                        Text => $String,
+                        From => $Charset,
+                        To   => 'utf-8',
+                    );
+                }
+                elsif ( $Charset ) {
+                    $EncodeObject->EncodeInput( \$String );
+                }
+
+                $DecodedValue .= $String;
+            }
+
+            $Value = $DecodedValue;
+        }
+
         $Info{$Header} = $Value;
     }
 
