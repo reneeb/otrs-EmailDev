@@ -63,6 +63,18 @@ sub Send {
     my $TimeObject   = $Kernel::OM->Get('Kernel::System::Time');
     my $MainObject   = $Kernel::OM->Get('Kernel::System::Main');
 
+    my $Class = ref $Self;
+
+    my $CommunicationLogObject = delete $Param{CommunicationLogObject};
+
+    $CommunicationLogObject->ObjectLog(
+        ObjectLogType => 'Message',
+        Priority      => 'Debug',
+        Key           => $Class,
+        Value         => 'Received message for emulated sending without real external connections.',
+    );
+
+
     # check needed stuff
     for my $Needed (qw(Header Body ToArray)) {
         if ( !$Param{$Needed} ) {
@@ -74,6 +86,20 @@ sub Send {
         }
     }
 
+    $CommunicationLogObject->ObjectLogStart(
+        ObjectLogType => 'Connection',
+    );
+
+    my $To = join ', ', @{ $Param{ToArray} };
+
+    $CommunicationLogObject->ObjectLog(
+        ObjectLogType => 'Connection',
+        Priority      => 'Info',
+        Key           => $Class,
+        Value         => sprintf( "Sending email from '%s' to '%s'.", $Param{From} // '', $To ),
+    );
+
+
     # encode utf8 header strings (of course, there should only be 7 bit in there!)
     $EncodeObject->EncodeOutput( $Param{Header} );
 
@@ -81,7 +107,6 @@ sub Send {
     $EncodeObject->EncodeOutput( $Param{Body} );
 
     # send data
-    my $To       = join ', ', @{ $Param{ToArray} };
     my $From     = $Param{From} // '';
     my $Time     = $TimeObject->SystemTime();
     my $Random   = sprintf "%04d", int rand 1000;
@@ -104,7 +129,21 @@ sub Send {
         );
     }
 
-    return 1;
+    $CommunicationLogObject->ObjectLog(
+        ObjectLogType => 'Connection',
+        Priority      => 'Info',
+        Key           => $Class,
+        Value         => "Email successfully sent!",
+    );
+
+    $CommunicationLogObject->ObjectLogStop(
+        ObjectLogType => 'Connection',
+        Status        => 'Successful',
+    );
+
+    return {
+        Success => 1,
+    };
 }
 
 1;
